@@ -39,6 +39,17 @@ pipeline {
       }
     }
   }
+node {
+  stage('SCM') {
+    checkout scm
+  }
+  stage('SonarQube Analysis') {
+    def scannerHome = tool 'SonarScanner';
+    withSonarQubeEnv(sonar) {
+      sh "~/bin/sonar-scanner"
+    }
+  }
+}
   stage('Build') {
     steps {
       sh 'mvn clean package'
